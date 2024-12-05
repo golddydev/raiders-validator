@@ -1,0 +1,66 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      versionType:
+        description: "Version type (patch or minor)"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18
+          check-latest: true
+          registry-url: https://registry.npmjs.org/
+          always-auth: true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Aiken
+        run: |
+          curl -sSfL https://install.aiken-lang.org | bash
+          ~/.aiken/bin/aikup
+          sudo ln -s ~/.aiken/bin/aiken /usr/local/bin/aiken
+
+      - name: Bump version and commit
+        run: |
+          git config --global user.email "firingdev@gmail.com"
+          git config --global user.name "Golddy Dev"
+          npm version ${{ github.event.inputs.versionType }} -m "chore(release): bump to %s version"
+
+      - name: Build
+        run: npm run build
+
+      - name: Remove dev tools
+        run: |
+          jq "del(.bin)" package.json > package.json.tmp
+          mv package.json.tmp package.json
+          npm install --production
+
+      - name: Publish to npm
+        run: npm publish
+
+      - name: Push to git repo
+        run: git push --follow-tags
