@@ -1,7 +1,7 @@
 {
-  "name": "novalab-raiders",
+  "name": "raiders-validator",
   "version": "0.4.1",
-  "description": "This is raiders validator from Novalab",
+  "description": "This is raiders validator",
   "engines": {
     "node": ">=18.18",
     "npm": ">=10.5"

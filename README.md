@@ -40,7 +40,7 @@ pub type Parameter {
 ### Parameter Functions
 
 ```typescript
-import { parameterBurn, parameterMint } from "novalab-raiders";
+import { parameterBurn, parameterMint } from "raiders-validator";
 ```
 
 #### Mint Parameter
@@ -81,7 +81,12 @@ if (!txCompleteResult.ok) {
 ### Raid Functions
 
 ```typescript
-import { raidClaim, raidCreate, raidRemove, raidUpdate } from "novalab-raiders";
+import {
+  raidClaim,
+  raidCreate,
+  raidRemove,
+  raidUpdate,
+} from "raiders-validator";
 ```
 
 #### Create a Raid
