@@ -9,7 +9,10 @@ const getDeployedConfig = async (
   lucid: LucidEvolution,
   isTesting: boolean = false
 ): Promise<Result<{ raidLock: UTxO; raidMint: UTxO }, string>> => {
-  const network = lucid.config().network.toLowerCase();
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
+  const network = lucidNetwork.toLowerCase();
+
   const raidLockDeployed = await loadUtxoFromFile(
     path.join(
       deployedPath,

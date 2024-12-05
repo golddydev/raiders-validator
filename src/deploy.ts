@@ -21,6 +21,9 @@ const deploy = async (
   seed: string,
   isTesting: boolean = false
 ): Promise<Result<void, string>> => {
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
+
   const adminPubKeyHash = getPaymentKey(adminAddress);
   if (!adminPubKeyHash.ok) return Err(adminPubKeyHash.error);
 
@@ -35,11 +38,11 @@ const deploy = async (
 
   const alwaysFailScript = createAlwaysFailScript();
   const deployedDestination = validatorToAddress(
-    lucid.config().network,
+    lucidNetwork,
     alwaysFailScript
   );
 
-  const network = lucid.config().network.toLowerCase();
+  const network = lucidNetwork.toLowerCase();
   const txComplete = await mayFailAsync(() =>
     lucid
       .newTx()

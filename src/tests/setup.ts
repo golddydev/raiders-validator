@@ -2,12 +2,9 @@ import {
   Emulator,
   generateEmulatorAccount,
   Lucid,
-  Network,
   UTxO,
 } from "@lucid-evolution/lucid";
 import { test } from "vitest";
-
-const network: Network = "Preprod";
 
 const setup = async () => {
   const adminAccount = generateEmulatorAccount({
@@ -40,7 +37,7 @@ const setup = async () => {
     authroizerAccount1,
     authroizerAccount2,
   ]);
-  const lucid = await Lucid(emulator, network);
+  const lucid = await Lucid(emulator, "Custom");
 
   const config = {
     feePercentage: 20,
@@ -72,6 +69,6 @@ const setup = async () => {
   };
 };
 
-const shinkaiTest = test.extend(await setup());
+const myTest = test.extend(await setup());
 
-export { shinkaiTest };
+export { myTest };

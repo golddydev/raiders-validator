@@ -13,6 +13,9 @@ import {
 } from "../utils/index.js";
 
 const getConfig = async (lucid: LucidEvolution, adminPubKeyHash: string) => {
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
+
   const parameterLockSpendingValidator =
     await readParameterLockSpendingValidator(adminPubKeyHash);
   if (!parameterLockSpendingValidator.ok)
@@ -21,7 +24,7 @@ const getConfig = async (lucid: LucidEvolution, adminPubKeyHash: string) => {
     parameterLockSpendingValidator.data
   );
   const parameterLockerAddress = validatorToAddress(
-    lucid.config().network,
+    lucidNetwork,
     parameterLockSpendingValidator.data
   );
 
@@ -48,7 +51,7 @@ const getConfig = async (lucid: LucidEvolution, adminPubKeyHash: string) => {
     raidLockSpendingValidator.data
   );
   const raidLockerAddress = validatorToAddress(
-    lucid.config().network,
+    lucidNetwork,
     raidLockSpendingValidator.data
   );
 

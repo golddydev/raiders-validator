@@ -69,7 +69,7 @@ const mint = async (
       .attachMetadata(674, {
         msg: ["Mint Parameter"],
       })
-      .complete()
+      .complete({ localUPLCEval: false })
   ).complete();
   if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
   return Ok(txComplete.data);
@@ -113,7 +113,7 @@ const burn = async (
       .attachMetadata(674, {
         msg: ["Burn Parameter"],
       })
-      .complete()
+      .complete({ localUPLCEval: false })
   ).complete();
   if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
 

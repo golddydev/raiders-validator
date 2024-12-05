@@ -26,15 +26,20 @@ const readParameterMintingPolicy = async (
   parameterLockerScriptHash: string
 ): Promise<Result<MintingPolicy, string>> => {
   try {
-    const { compiledCode } = JSON.parse(await fs.readFile(plutusPath, "utf8"))
-      .validators[0];
+    const { compiledCode } = JSON.parse(
+      await fs.readFile(plutusPath, "utf8")
+    ).validators.find(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (validator: any) =>
+        validator.title == "parameter_mint.parameter_mint.mint"
+    );
 
     const appliedCompiledCode = applyParamsToScript(
       applyDoubleCborEncoding(compiledCode),
       [adminPubKeyHash, parameterLockerScriptHash]
     );
     return Ok({
-      type: "PlutusV2",
+      type: "PlutusV3",
       script: applyDoubleCborEncoding(appliedCompiledCode),
     });
   } catch (err) {
@@ -47,8 +52,12 @@ const readRaidMintingPolicy = async (
   parameterNftPolicyId: string
 ): Promise<Result<MintingPolicy, string>> => {
   try {
-    const { compiledCode } = JSON.parse(await fs.readFile(plutusPath, "utf8"))
-      .validators[2];
+    const { compiledCode } = JSON.parse(
+      await fs.readFile(plutusPath, "utf8")
+    ).validators.find(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (validator: any) => validator.title == "raid_mint.raid_mint.mint"
+    );
 
     const appliedCompiledCode = applyParamsToScript(
       applyDoubleCborEncoding(compiledCode),
@@ -56,7 +65,7 @@ const readRaidMintingPolicy = async (
     );
 
     return Ok({
-      type: "PlutusV2",
+      type: "PlutusV3",
       script: applyDoubleCborEncoding(appliedCompiledCode),
     });
   } catch (err) {
@@ -69,8 +78,12 @@ const readRaidLockSpendingValidator = async (
   raidPolicyId: string
 ): Promise<Result<SpendingValidator, string>> => {
   try {
-    const { compiledCode } = JSON.parse(await fs.readFile(plutusPath, "utf8"))
-      .validators[1];
+    const { compiledCode } = JSON.parse(
+      await fs.readFile(plutusPath, "utf8")
+    ).validators.find(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (validator: any) => validator.title == "raid_lock.raid_lock.spend"
+    );
 
     const appliedCompiledCode = applyParamsToScript(
       applyDoubleCborEncoding(compiledCode),
@@ -78,7 +91,7 @@ const readRaidLockSpendingValidator = async (
     );
 
     return Ok({
-      type: "PlutusV2",
+      type: "PlutusV3",
       script: applyDoubleCborEncoding(appliedCompiledCode),
     });
   } catch (err) {

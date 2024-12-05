@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@blockfrost/blockfrost-js": "^5.5.0",
-    "@lucid-evolution/lucid": "^0.3.26",
+    "@lucid-evolution/lucid": "^0.4.13",
     "@noble/hashes": "^1.4.0",
     "bip39": "^3.1.0",
     "commander": "^11.1.0",
@@ -35,7 +35,7 @@
     "enquirer": "^2.4.1",
     "flatted": "^3.3.1",
     "lodash": "^4.17.21",
-    "raiders-helper": "^0.2.9",
+    "raiders-helper": "^0.3.0",
     "p-limit": "^5.0.0",
     "p-retry": "^6.2.0",
     "parse-duration": "^1.1.0",

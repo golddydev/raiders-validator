@@ -48,8 +48,8 @@ const create = async (
 > => {
   if (quantity < 0) return Err("quantity must be greater than or equal to 0");
   if (price <= 0n) return Err("price must be greater than 0");
-
-  const network = lucid.config().network;
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
 
   const creatorPubKeyHash = getPaymentKey(creator);
   if (!creatorPubKeyHash.ok)
@@ -64,7 +64,7 @@ const create = async (
     return Err(`Deploy Raid Contracts: Script Not Found`);
 
   const raidPolicyId = validatorToScriptHash(raidMint.scriptRef);
-  const raidLockAddress = validatorToAddress(network, raidLock.scriptRef);
+  const raidLockAddress = validatorToAddress(lucidNetwork, raidLock.scriptRef);
 
   /// decode parameter
   if (!parameterRefUtxo.datum)
@@ -75,7 +75,7 @@ const create = async (
   const { projectAddress: projectAddressSchema, feePercentage } =
     decodedParameter.data;
   const projectAddress = convertSchemaTypeToAddress(
-    network,
+    lucidNetwork,
     projectAddressSchema
   );
   if (!projectAddress.ok)
@@ -129,7 +129,7 @@ const create = async (
       .attachMetadata(674, {
         msg: ["Create Raid"],
       })
-      .complete()
+      .complete({ localUPLCEval: false })
   ).complete();
   if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
   return Ok({
@@ -157,6 +157,8 @@ const createWithAuthorizer = async (
 > => {
   if (quantity < 0) return Err("quantity must be greater than or equal to 0");
   if (price <= 0n) return Err("price must be greater than 0");
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
 
   const creatorPubKeyHash = getPaymentKey(creator);
   if (!creatorPubKeyHash.ok)
@@ -171,10 +173,7 @@ const createWithAuthorizer = async (
     return Err(`Deploy Raid Contracts: Script Not Found`);
 
   const raidPolicyId = validatorToScriptHash(raidMint.scriptRef);
-  const raidLockAddress = validatorToAddress(
-    lucid.config().network,
-    raidLock.scriptRef
-  );
+  const raidLockAddress = validatorToAddress(lucidNetwork, raidLock.scriptRef);
 
   /// decode parameter
   if (!parameterRefUtxo.datum)
@@ -241,7 +240,7 @@ const createWithAuthorizer = async (
       .attachMetadata(674, {
         msg: ["Create Raid"],
       })
-      .complete()
+      .complete({ localUPLCEval: false })
   ).complete();
   if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
   return Ok({
@@ -306,7 +305,7 @@ const claim = async (
       .attachMetadata(674, {
         msg: ["Claim Raid"],
       })
-      .complete()
+      .complete({ localUPLCEval: false })
   ).complete();
   if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
   return Ok(txComplete.data);
@@ -317,6 +316,9 @@ const remove = async (
   unit: string,
   isTesting: boolean = false
 ): Promise<Result<TxSignBuilder, string>> => {
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
+
   const deployedConfigResult = await getDeployedConfig(lucid, isTesting);
   if (!deployedConfigResult.ok)
     return Err(`Deployed Config error: ${deployedConfigResult.error}`);
@@ -357,14 +359,14 @@ const remove = async (
       .mintAssets(burnAssets, RaidRemove())
       .addSigner(
         credentialToAddress(
-          lucid.config().network,
+          lucidNetwork,
           keyHashToCredential(creatorPubKeyHash)
         )
       )
       .attachMetadata(674, {
         msg: ["Remove Raid"],
       })
-      .complete()
+      .complete({ localUPLCEval: false })
   ).complete();
   if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
   return Ok(txComplete.data);

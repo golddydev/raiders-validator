@@ -1,10 +1,10 @@
 import { assert, describe } from "vitest";
 
 import { burn, mint } from "../parameter.js";
-import { shinkaiTest } from "./setup.js";
+import { myTest } from "./setup.js";
 
 describe("parameter test", () => {
-  shinkaiTest(
+  myTest(
     "can mint parameter nft",
     async ({ accounts, config, emulator, lucid, referenceUtxos }) => {
       const { adminAccount, projectAccount } = accounts;
@@ -23,12 +23,14 @@ describe("parameter test", () => {
       ).submit();
       emulator.awaitBlock(10);
 
-      const utxos = await lucid.utxosByOutRef([{ txHash, outputIndex: 0 }]);
+      const utxos = await lucid.utxosByOutRef([
+        { txHash: txHash, outputIndex: 0 },
+      ]);
       referenceUtxos.parameterRefUtxo = utxos[0];
     }
   );
 
-  shinkaiTest(
+  myTest(
     "can burn parameter nft",
     async ({ accounts, emulator, lucid, referenceUtxos }) => {
       const { adminAccount } = accounts;

@@ -8,10 +8,10 @@ import {
   raidCreateWithAuthorizer,
   raidRemove,
 } from "../index.js";
-import { shinkaiTest } from "./setup.js";
+import { myTest } from "./setup.js";
 
 describe("raid test", () => {
-  shinkaiTest(
+  myTest(
     "can mint parameter nft",
     async ({ accounts, config, emulator, lucid, referenceUtxos }) => {
       const {
@@ -40,7 +40,7 @@ describe("raid test", () => {
     }
   );
 
-  shinkaiTest(
+  myTest(
     "deploy raid mint and raid lock validators",
     async ({ accounts, lucid }) => {
       const { adminAccount, fundAccount } = accounts;
@@ -55,7 +55,7 @@ describe("raid test", () => {
     }
   );
 
-  shinkaiTest(
+  myTest(
     "can create raid",
     async ({ accounts, emulator, lucid, referenceUtxos, result }) => {
       const { userAccount1 } = accounts;
@@ -81,7 +81,7 @@ describe("raid test", () => {
     }
   );
 
-  shinkaiTest(
+  myTest(
     "can create raid without paying fee",
     async ({ accounts, emulator, lucid, referenceUtxos, result }) => {
       const { userAccount1, authroizerAccount1 } = accounts;
@@ -110,7 +110,7 @@ describe("raid test", () => {
     }
   );
 
-  shinkaiTest(
+  myTest(
     "can claim raid",
     async ({ accounts, emulator, lucid, referenceUtxos, result }) => {
       const { userAccount2, adminAccount } = accounts;
@@ -134,7 +134,7 @@ describe("raid test", () => {
     }
   );
 
-  shinkaiTest(
+  myTest(
     "can not claim raid",
     async ({ accounts, lucid, referenceUtxos, result }) => {
       const { userAccount2, adminAccount } = accounts;
@@ -156,7 +156,7 @@ describe("raid test", () => {
     }
   );
 
-  shinkaiTest(
+  myTest(
     "can remove raid",
     async ({ accounts, emulator, lucid, referenceUtxos, result }) => {
       const { userAccount1 } = accounts;
