@@ -1,3 +1,4 @@
+import { TransactionWitnesses } from "@lucid-evolution/lucid";
 import { assert, describe } from "vitest";
 
 import { deploy } from "../deploy.js";
@@ -31,7 +32,7 @@ describe("raid test", () => {
 
       lucid.selectWallet.fromSeed(adminAccount.seedPhrase);
       const txHash = await (
-        await txResult.data.sign.withWallet().complete()
+        await lucid.fromTx(txResult.data.toCBOR()).sign.withWallet().complete()
       ).submit();
       emulator.awaitBlock(10);
 
@@ -75,7 +76,12 @@ describe("raid test", () => {
       assert(txResult.ok, "Tx Failed");
 
       lucid.selectWallet.fromSeed(userAccount1.seedPhrase);
-      await (await txResult.data.tx.sign.withWallet().complete()).submit();
+      await (
+        await lucid
+          .fromTx(txResult.data.tx.toCBOR())
+          .sign.withWallet()
+          .complete()
+      ).submit();
       emulator.awaitBlock(10);
       result.raidUnits.push(txResult.data.assetId);
     }
@@ -101,10 +107,21 @@ describe("raid test", () => {
       );
       assert(txResult.ok, "Tx Failed");
 
+      const txWitnesses: TransactionWitnesses[] = [];
       lucid.selectWallet.fromSeed(authroizerAccount1.seedPhrase);
-      txResult.data.tx.sign.withWallet();
+      txWitnesses.push(
+        await lucid.fromTx(txResult.data.tx.toCBOR()).partialSign.withWallet()
+      );
       lucid.selectWallet.fromSeed(userAccount1.seedPhrase);
-      await (await txResult.data.tx.sign.withWallet().complete()).submit();
+      txWitnesses.push(
+        await lucid.fromTx(txResult.data.tx.toCBOR()).partialSign.withWallet()
+      );
+      await (
+        await lucid
+          .fromTx(txResult.data.tx.toCBOR())
+          .assemble(txWitnesses)
+          .complete()
+      ).submit();
       emulator.awaitBlock(10);
       result.raidUnits.push(txResult.data.assetId);
     }
@@ -126,10 +143,21 @@ describe("raid test", () => {
       );
       assert(txResult.ok, "Tx Failed");
 
+      const txWitnesses: TransactionWitnesses[] = [];
       lucid.selectWallet.fromSeed(adminAccount.seedPhrase);
-      const txSigned = txResult.data.sign.withWallet();
+      txWitnesses.push(
+        await lucid.fromTx(txResult.data.toCBOR()).partialSign.withWallet()
+      );
       lucid.selectWallet.fromSeed(userAccount2.seedPhrase);
-      await (await txSigned.sign.withWallet().complete()).submit();
+      txWitnesses.push(
+        await lucid.fromTx(txResult.data.toCBOR()).partialSign.withWallet()
+      );
+      await (
+        await lucid
+          .fromTx(txResult.data.toCBOR())
+          .assemble(txWitnesses)
+          .complete()
+      ).submit();
       emulator.awaitBlock(10);
     }
   );
@@ -168,7 +196,9 @@ describe("raid test", () => {
       assert(txResult.ok, "Tx Failed");
 
       lucid.selectWallet.fromSeed(userAccount1.seedPhrase);
-      await (await txResult.data.sign.withWallet().complete()).submit();
+      await (
+        await lucid.fromTx(txResult.data.toCBOR()).sign.withWallet().complete()
+      ).submit();
       emulator.awaitBlock(10);
     }
   );

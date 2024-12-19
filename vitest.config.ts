@@ -7,9 +7,7 @@ export default defineConfig({
   test: {
     pool: "forks",
     reporters: "verbose",
-    include: [
-      "./src/tests/**/parameter-mint.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-    ],
+    include: ["./src/tests/**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     testTimeout: 420_000,
     bail: 3,
   },

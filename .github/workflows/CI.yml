@@ -20,11 +20,11 @@ jobs:
           node-version: 20.18
           check-latest: true
 
-      - name: Update npm
-        run: npm install -g npm@latest
+      - name: Update npm and install pnpm
+        run: npm install -g npm@latest pnpm
 
       - name: Install dependencies
-        run: npm ci --include dev
+        run: pnpm install --frozen-lockfile
 
       - name: Install Aiken
         run: |
@@ -49,11 +49,11 @@ jobs:
           node-version: 20.18
           check-latest: true
 
-      - name: Update npm
-        run: npm install -g npm@latest
+      - name: Update npm and install pnpm
+        run: npm install -g npm@latest pnpm
 
       - name: Install dependencies
-        run: npm install --include dev
+        run: pnpm install --frozen-lockfile
 
       - name: Install Aiken
         run: |
@@ -78,11 +78,11 @@ jobs:
           node-version: 20.18
           check-latest: true
 
-      - name: Update npm
-        run: npm install -g npm@latest
+      - name: Update npm and install pnpm
+        run: npm install -g npm@latest pnpm
 
       - name: Install dependencies
-        run: npm install --include dev
+        run: pnpm install --frozen-lockfile
 
       - name: Install Aiken
         run: |

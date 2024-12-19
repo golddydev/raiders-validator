@@ -19,14 +19,14 @@
     "prettier": "concurrently \"npx prettier -w '**/*.{js,jsx,ts,tsx,json,.*}'\" \"aiken fmt\"",
     "lint": "concurrently \"npx prettier --check '**/*.{js,jsx,ts,tsx,json,.*}'\" \"aiken fmt --check\" \"npx eslint . --max-warnings=0\"",
     "test:aiken": "concurrently \"aiken check\"",
-    "test": "aiken build -t verbose && vitest run"
+    "test": "vitest run"
   },
   "bin": {
     "raiders": "./bin/raiders"
   },
   "dependencies": {
     "@blockfrost/blockfrost-js": "^5.5.0",
-    "@lucid-evolution/lucid": "^0.4.13",
+    "@lucid-evolution/lucid": "^0.4.17",
     "@noble/hashes": "^1.4.0",
     "bip39": "^3.1.0",
     "commander": "^11.1.0",
@@ -35,7 +35,7 @@
     "enquirer": "^2.4.1",
     "flatted": "^3.3.1",
     "lodash": "^4.17.21",
-    "raiders-helper": "^0.3.0",
+    "raiders-helper": "^0.3.2",
     "p-limit": "^5.0.0",
     "p-retry": "^6.2.0",
     "parse-duration": "^1.1.0",
@@ -50,7 +50,7 @@
     "@typescript-eslint/parser": "^8.3.0",
     "app-root-path": "^3.1.0",
     "concurrently": "^8.2.0",
-    "eslint": "^8.51.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-node": "^0.3.9",
     "eslint-plugin-import": "^2.28.1",

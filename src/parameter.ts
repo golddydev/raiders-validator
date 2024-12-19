@@ -64,7 +64,7 @@ const mint = async (
       .newTx()
       .mintAssets(mintingAssets, ParameterMint())
       .attach.MintingPolicy(parameterMint.validator)
-      .addSigner(adminAddress)
+      .addSignerKey(adminPubKeyHash.data)
       .pay.ToAddressWithData(parameterLock.address, datum.data, mintingAssets)
       .attachMetadata(674, {
         msg: ["Mint Parameter"],

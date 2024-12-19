@@ -1,7 +1,5 @@
 import {
   Assets,
-  credentialToAddress,
-  keyHashToCredential,
   LucidEvolution,
   TxSignBuilder,
   UTxO,
@@ -120,7 +118,7 @@ const create = async (
       .newTx()
       .readFrom([parameterRefUtxo, raidMint])
       .mintAssets(mintingAssets, RaidCreate(quantity, price))
-      .addSigner(creator)
+      .addSignerKey(creatorPubKeyHash.data)
       .pay.ToAddressWithData(raidLockAddress, datum.data, {
         ...mintingAssets,
         lovelace: requiredBounty,
@@ -231,8 +229,8 @@ const createWithAuthorizer = async (
       .newTx()
       .readFrom([parameterRefUtxo, raidMint])
       .mintAssets(mintingAssets, RaidCreate(quantity, price))
-      .addSigner(creator)
-      .addSigner(authorizer)
+      .addSignerKey(creatorPubKeyHash.data)
+      .addSignerKey(authroizerPaymentKey.data)
       .pay.ToAddressWithData(raidLockAddress, datum.data, {
         ...mintingAssets,
         lovelace: requiredBounty,
@@ -297,7 +295,7 @@ const claim = async (
       .newTx()
       .readFrom([raidLock])
       .collectFrom([utxoResult.data], RaidClaim())
-      .addSigner(adminAddress)
+      .addSignerKey(adminPubKeyHash.data)
       .pay.ToAddressWithData(lockedAddress, newDatum.data, {
         ...assets,
         lovelace: requiredBounty,
@@ -357,12 +355,7 @@ const remove = async (
       .readFrom([raidMint, raidLock])
       .collectFrom([utxoResult.data], RaidClose())
       .mintAssets(burnAssets, RaidRemove())
-      .addSigner(
-        credentialToAddress(
-          lucidNetwork,
-          keyHashToCredential(creatorPubKeyHash)
-        )
-      )
+      .addSignerKey(creatorPubKeyHash)
       .attachMetadata(674, {
         msg: ["Remove Raid"],
       })

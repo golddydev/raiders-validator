@@ -32,11 +32,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
-      - name: Update npm
-        run: npm install -g npm@latest
+      - name: Update npm and install pnpm
+        run: npm install -g npm@latest pnpm
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Install Aiken
         run: |
@@ -57,7 +57,7 @@ jobs:
         run: |
           jq "del(.bin)" package.json > package.json.tmp
           mv package.json.tmp package.json
-          npm install --production
+          pnpm install --prod
 
       - name: Publish to npm
         run: npm publish
