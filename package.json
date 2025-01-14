@@ -1,6 +1,6 @@
 {
   "name": "raiders-validator",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "This is raiders validator",
   "engines": {
     "node": ">=18.18",
