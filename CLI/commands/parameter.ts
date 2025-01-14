@@ -1,8 +1,8 @@
 import { get, getLucid } from "raiders-helper";
 
+import { burn, mint } from "../../src/parameter.js";
+import { parseTokenId } from "../../src/utils/index.js";
 import program from "../cli.js";
-import { burn, mint } from "../parameter.js";
-import { parseTokenId } from "../utils/index.js";
 
 const parameterCommand = program
   .command("parameter")

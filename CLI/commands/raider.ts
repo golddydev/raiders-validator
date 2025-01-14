@@ -1,7 +1,6 @@
 import { get, mayFailAsync } from "raiders-helper";
 
-import program from "../cli.js";
-import { claim, create, list, remove } from "../raider.js";
+import { claim, create, list, remove } from "../../src/raider.js";
 import {
   lucidLoader,
   parseAmount,
@@ -9,7 +8,8 @@ import {
   parseTokenId,
   parseTxHash,
   parseTxIndex,
-} from "../utils/index.js";
+} from "../../src/utils/index.js";
+import program from "../cli.js";
 
 const raiderCommand = program
   .command("raider")

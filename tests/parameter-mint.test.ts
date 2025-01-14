@@ -1,6 +1,6 @@
 import { assert, describe } from "vitest";
 
-import { burn, mint } from "../parameter.js";
+import { burn, mint } from "../src/parameter.js";
 import { myTest } from "./setup.js";
 
 describe("parameter test", () => {

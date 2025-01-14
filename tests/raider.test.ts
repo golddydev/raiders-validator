@@ -1,14 +1,14 @@
 import { TransactionWitnesses } from "@lucid-evolution/lucid";
 import { assert, describe } from "vitest";
 
-import { deploy } from "../deploy.js";
+import { deploy } from "../src/deploy.js";
 import {
   parameterMint,
   raidClaim,
   raidCreate,
   raidCreateWithAuthorizer,
   raidRemove,
-} from "../index.js";
+} from "../src/index.js";
 import { myTest } from "./setup.js";
 
 describe("raid test", () => {

@@ -40,8 +40,8 @@ jobs:
 
       - name: Install Aiken
         run: |
-          curl -sSfL https://install.aiken-lang.org | bash
-          ~/.aiken/bin/aikup
+          curl --proto '=https' --tlsv1.2 -LsSf https://install.aiken-lang.org | sh
+          ~/.aiken/bin/aikup install v1.1.9
           sudo ln -s ~/.aiken/bin/aiken /usr/local/bin/aiken
 
       - name: Bump version and commit

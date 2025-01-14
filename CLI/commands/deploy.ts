@@ -1,8 +1,8 @@
 import { get, getLucid } from "raiders-helper";
 
+import { deploy } from "../../src/deploy.js";
+import { getSeed } from "../../src/utils/index.js";
 import program from "../cli.js";
-import { deploy } from "../deploy.js";
-import { getSeed } from "../utils/index.js";
 
 program
   .command("deploy")
