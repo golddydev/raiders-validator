@@ -12,8 +12,8 @@ importers:
         specifier: ^5.7.0
         version: 5.7.0
       '@lucid-evolution/lucid':
-        specifier: ^0.4.19
-        version: 0.4.19(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0)(@harmoniclabs/crypto@0.2.4)(@harmoniclabs/pair@1.0.0)(fast-check@3.23.2)
+        specifier: ^0.4.20
+        version: 0.4.20(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0)(@harmoniclabs/crypto@0.2.4)(@harmoniclabs/pair@1.0.0)(fast-check@3.23.2)
       '@noble/hashes':
         specifier: ^1.4.0
         version: 1.6.1
@@ -596,8 +596,8 @@ packages:
   '@lucid-evolution/crc8@0.1.8':
     resolution: {integrity: sha512-88+/S6n+sPgxYtG05rvbJDVb8MoFGzckkR3p26uGrzngYzlJGfxBWIzNhVwfI2mgINPo2C5lkZW3GYnfY0MjuA==}
 
-  '@lucid-evolution/lucid@0.4.19':
-    resolution: {integrity: sha512-LlwC3yj9oojHoaxxCmTBeVyYLoegbhnvGnVAheM0otQuTa7z4IxHXIqxSopDgBTeG6psQGtJ0z2lkfgSxzPjOw==}
+  '@lucid-evolution/lucid@0.4.20':
+    resolution: {integrity: sha512-/LGWdg9MLP7trmWlpsIlnCHnUNHRWOo32ntoL9UBYIRr2ahl/8Aoj3+WzmVKRQkT752sWp+AZ1TerNVeu772Zw==}
 
   '@lucid-evolution/plutus@0.1.28':
     resolution: {integrity: sha512-O8vOsed+U3dda32Y5iyvmnPUwuNR0K64RMow/fT+SUAcgDmTNVmXr63YG7lLrY165eC0DB/K6hsHMyqIF5DpBA==}
@@ -2166,7 +2166,7 @@ snapshots:
 
   '@lucid-evolution/crc8@0.1.8': {}
 
-  '@lucid-evolution/lucid@0.4.19(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0)(@harmoniclabs/crypto@0.2.4)(@harmoniclabs/pair@1.0.0)(fast-check@3.23.2)':
+  '@lucid-evolution/lucid@0.4.20(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0)(@harmoniclabs/crypto@0.2.4)(@harmoniclabs/pair@1.0.0)(fast-check@3.23.2)':
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser': 6.0.2-3
       '@anastasia-labs/cardano-multiplatform-lib-nodejs': 6.0.2-3
@@ -3166,7 +3166,7 @@ snapshots:
     dependencies:
       '@blockfrost/blockfrost-js': 5.7.0
       '@dcspark/cardano-multiplatform-lib-nodejs': 6.0.1
-      '@lucid-evolution/lucid': 0.4.19(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0)(@harmoniclabs/crypto@0.2.4)(@harmoniclabs/pair@1.0.0)(fast-check@3.23.2)
+      '@lucid-evolution/lucid': 0.4.20(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0)(@harmoniclabs/crypto@0.2.4)(@harmoniclabs/pair@1.0.0)(fast-check@3.23.2)
       bip39: 3.1.0
       dotenv: 16.4.7
       flatted: 3.3.2
