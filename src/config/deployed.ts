@@ -1,4 +1,4 @@
-import { LucidEvolution, UTxO } from "@lucid-evolution/lucid";
+import { Network, UTxO } from "@lucid-evolution/lucid";
 import path from "path";
 import { Err, Ok, Result } from "ts-res";
 
@@ -6,13 +6,10 @@ import { deployedPath } from "../deploy.js";
 import { loadUtxoFromFile } from "../utils/index.js";
 
 const getDeployedConfig = async (
-  lucid: LucidEvolution,
+  lucidNetwork: Network,
   isTesting: boolean = false
 ): Promise<Result<{ raidLock: UTxO; raidMint: UTxO }, string>> => {
-  const lucidNetwork = lucid.config().network;
-  if (!lucidNetwork) return Err("Lucid Network is not set");
   const network = lucidNetwork.toLowerCase();
-
   const raidLockDeployed = await loadUtxoFromFile(
     path.join(
       deployedPath,

@@ -32,7 +32,7 @@ describe("raid test", () => {
 
       lucid.selectWallet.fromSeed(adminAccount.seedPhrase);
       const txHash = await (
-        await lucid.fromTx(txResult.data.toCBOR()).sign.withWallet().complete()
+        await lucid.fromTx(txResult.data).sign.withWallet().complete()
       ).submit();
       emulator.awaitBlock(10);
 
@@ -77,10 +77,7 @@ describe("raid test", () => {
 
       lucid.selectWallet.fromSeed(userAccount1.seedPhrase);
       await (
-        await lucid
-          .fromTx(txResult.data.tx.toCBOR())
-          .sign.withWallet()
-          .complete()
+        await lucid.fromTx(txResult.data.txCbor).sign.withWallet().complete()
       ).submit();
       emulator.awaitBlock(10);
       result.raidUnits.push(txResult.data.assetId);
@@ -110,15 +107,15 @@ describe("raid test", () => {
       const txWitnesses: TransactionWitnesses[] = [];
       lucid.selectWallet.fromSeed(authroizerAccount1.seedPhrase);
       txWitnesses.push(
-        await lucid.fromTx(txResult.data.tx.toCBOR()).partialSign.withWallet()
+        await lucid.fromTx(txResult.data.txCbor).partialSign.withWallet()
       );
       lucid.selectWallet.fromSeed(userAccount1.seedPhrase);
       txWitnesses.push(
-        await lucid.fromTx(txResult.data.tx.toCBOR()).partialSign.withWallet()
+        await lucid.fromTx(txResult.data.txCbor).partialSign.withWallet()
       );
       await (
         await lucid
-          .fromTx(txResult.data.tx.toCBOR())
+          .fromTx(txResult.data.txCbor)
           .assemble(txWitnesses)
           .complete()
       ).submit();
@@ -146,17 +143,14 @@ describe("raid test", () => {
       const txWitnesses: TransactionWitnesses[] = [];
       lucid.selectWallet.fromSeed(adminAccount.seedPhrase);
       txWitnesses.push(
-        await lucid.fromTx(txResult.data.toCBOR()).partialSign.withWallet()
+        await lucid.fromTx(txResult.data).partialSign.withWallet()
       );
       lucid.selectWallet.fromSeed(userAccount2.seedPhrase);
       txWitnesses.push(
-        await lucid.fromTx(txResult.data.toCBOR()).partialSign.withWallet()
+        await lucid.fromTx(txResult.data).partialSign.withWallet()
       );
       await (
-        await lucid
-          .fromTx(txResult.data.toCBOR())
-          .assemble(txWitnesses)
-          .complete()
+        await lucid.fromTx(txResult.data).assemble(txWitnesses).complete()
       ).submit();
       emulator.awaitBlock(10);
     }
@@ -197,7 +191,7 @@ describe("raid test", () => {
 
       lucid.selectWallet.fromSeed(userAccount1.seedPhrase);
       await (
-        await lucid.fromTx(txResult.data.toCBOR()).sign.withWallet().complete()
+        await lucid.fromTx(txResult.data).sign.withWallet().complete()
       ).submit();
       emulator.awaitBlock(10);
     }

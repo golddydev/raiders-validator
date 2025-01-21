@@ -1,7 +1,6 @@
 import {
   Assets,
   LucidEvolution,
-  TxSignBuilder,
   UTxO,
   validatorToAddress,
   validatorToScriptHash,
@@ -38,7 +37,7 @@ const create = async (
 ): Promise<
   Result<
     {
-      tx: TxSignBuilder;
+      txCbor: string;
       assetId: string;
     },
     string
@@ -53,7 +52,7 @@ const create = async (
   if (!creatorPubKeyHash.ok)
     return Err(`Creator Address error: ${creatorPubKeyHash.error}`);
 
-  const deployedConfigResult = await getDeployedConfig(lucid, isTesting);
+  const deployedConfigResult = await getDeployedConfig(lucidNetwork, isTesting);
   if (!deployedConfigResult.ok)
     return Err(`Deployed Config error: ${deployedConfigResult.error}`);
 
@@ -113,7 +112,7 @@ const create = async (
 
   lucid.wallet().overrideUTxOs(selectedUtxos);
 
-  const txComplete = await mayFailAsync(() =>
+  const txCompleteResult = await mayFailAsync(() =>
     lucid
       .newTx()
       .readFrom([parameterRefUtxo, raidMint])
@@ -127,11 +126,12 @@ const create = async (
       .attachMetadata(674, {
         msg: ["Create Raid"],
       })
-      .complete({ localUPLCEval: false })
+      .complete()
   ).complete();
-  if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
+  if (!txCompleteResult.ok)
+    return Err(`Building Tx: ${txCompleteResult.error}`);
   return Ok({
-    tx: txComplete.data,
+    txCbor: txCompleteResult.data.toCBOR(),
     assetId: `${raidPolicyId}${uniqueAssetName}`,
   });
 };
@@ -147,7 +147,7 @@ const createWithAuthorizer = async (
 ): Promise<
   Result<
     {
-      tx: TxSignBuilder;
+      txCbor: string;
       assetId: string;
     },
     string
@@ -162,7 +162,7 @@ const createWithAuthorizer = async (
   if (!creatorPubKeyHash.ok)
     return Err(`Creator Address error: ${creatorPubKeyHash.error}`);
 
-  const deployedConfigResult = await getDeployedConfig(lucid, isTesting);
+  const deployedConfigResult = await getDeployedConfig(lucidNetwork, isTesting);
   if (!deployedConfigResult.ok)
     return Err(`Deployed Config error: ${deployedConfigResult.error}`);
 
@@ -224,7 +224,7 @@ const createWithAuthorizer = async (
 
   lucid.wallet().overrideUTxOs(selectedUtxos);
 
-  const txComplete = await mayFailAsync(() =>
+  const txCompleteResult = await mayFailAsync(() =>
     lucid
       .newTx()
       .readFrom([parameterRefUtxo, raidMint])
@@ -238,11 +238,12 @@ const createWithAuthorizer = async (
       .attachMetadata(674, {
         msg: ["Create Raid"],
       })
-      .complete({ localUPLCEval: false })
+      .complete()
   ).complete();
-  if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
+  if (!txCompleteResult.ok)
+    return Err(`Building Tx: ${txCompleteResult.error}`);
   return Ok({
-    tx: txComplete.data,
+    txCbor: txCompleteResult.data.toCBOR(),
     assetId: `${raidPolicyId}${uniqueAssetName}`,
   });
 };
@@ -252,11 +253,14 @@ const claim = async (
   adminAddress: string,
   unit: string,
   isTesting: boolean = false
-): Promise<Result<TxSignBuilder, string>> => {
+): Promise<Result<string, string>> => {
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
+
   const adminPubKeyHash = getPaymentKey(adminAddress);
   if (!adminPubKeyHash.ok) return Err(adminPubKeyHash.error);
 
-  const deployedConfigResult = await getDeployedConfig(lucid, isTesting);
+  const deployedConfigResult = await getDeployedConfig(lucidNetwork, isTesting);
   if (!deployedConfigResult.ok)
     return Err(`Deployed Config error: ${deployedConfigResult.error}`);
 
@@ -290,7 +294,7 @@ const claim = async (
   const newDatum = makeRaidDatum(quantity - 1, price, creatorPubKeyHash);
   if (!newDatum.ok) return Err(`Making Datum error: ${newDatum.error}`);
 
-  const txComplete = await mayFailAsync(() =>
+  const txCompleteResult = await mayFailAsync(() =>
     lucid
       .newTx()
       .readFrom([raidLock])
@@ -303,21 +307,22 @@ const claim = async (
       .attachMetadata(674, {
         msg: ["Claim Raid"],
       })
-      .complete({ localUPLCEval: false })
+      .complete()
   ).complete();
-  if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
-  return Ok(txComplete.data);
+  if (!txCompleteResult.ok)
+    return Err(`Building Tx: ${txCompleteResult.error}`);
+  return Ok(txCompleteResult.data.toCBOR());
 };
 
 const remove = async (
   lucid: LucidEvolution,
   unit: string,
   isTesting: boolean = false
-): Promise<Result<TxSignBuilder, string>> => {
+): Promise<Result<string, string>> => {
   const lucidNetwork = lucid.config().network;
   if (!lucidNetwork) return Err("Lucid Network is not set");
 
-  const deployedConfigResult = await getDeployedConfig(lucid, isTesting);
+  const deployedConfigResult = await getDeployedConfig(lucidNetwork, isTesting);
   if (!deployedConfigResult.ok)
     return Err(`Deployed Config error: ${deployedConfigResult.error}`);
 
@@ -349,7 +354,7 @@ const remove = async (
     [unit]: -1n,
   };
 
-  const txComplete = await mayFailAsync(() =>
+  const txCompleteResult = await mayFailAsync(() =>
     lucid
       .newTx()
       .readFrom([raidMint, raidLock])
@@ -359,14 +364,16 @@ const remove = async (
       .attachMetadata(674, {
         msg: ["Remove Raid"],
       })
-      .complete({ localUPLCEval: false })
+      .complete()
   ).complete();
-  if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
-  return Ok(txComplete.data);
+  if (!txCompleteResult.ok)
+    return Err(`Building Tx: ${txCompleteResult.error}`);
+  return Ok(txCompleteResult.data.toCBOR());
 };
 
 const list = async (
-  blockfrostApiKey: string
+  blockfrostApiKey: string,
+  isTesting: boolean = false
 ): Promise<Result<string[], string>> => {
   const lucidResult = await mayFailAsync(() =>
     getLucid(blockfrostApiKey)
@@ -374,8 +381,10 @@ const list = async (
   if (!lucidResult.ok)
     return Err(`Making Lucid Evolution error: ${lucidResult.error}`);
   const lucid = lucidResult.data;
+  const lucidNetwork = lucid.config().network;
+  if (!lucidNetwork) return Err("Lucid Network is not set");
 
-  const deployedConfigResult = await getDeployedConfig(lucid);
+  const deployedConfigResult = await getDeployedConfig(lucidNetwork, isTesting);
   if (!deployedConfigResult.ok)
     return Err(`Deployed Config error: ${deployedConfigResult.error}`);
 

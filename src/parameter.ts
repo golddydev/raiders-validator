@@ -2,7 +2,6 @@ import {
   Assets,
   LucidEvolution,
   paymentCredentialOf,
-  TxSignBuilder,
 } from "@lucid-evolution/lucid";
 import { getPaymentKey, mayFail, mayFailAsync } from "raiders-helper";
 import { Err, Ok, Result } from "ts-res";
@@ -18,7 +17,7 @@ const mint = async (
   projectAddress: string,
   authorizersAddresses: string[],
   feePercentage: number
-): Promise<Result<TxSignBuilder, string>> => {
+): Promise<Result<string, string>> => {
   const adminPubKeyHash = getPaymentKey(adminAddress);
   if (!adminPubKeyHash.ok) return Err(adminPubKeyHash.error);
 
@@ -59,7 +58,7 @@ const mint = async (
   if (!datum.ok) return Err(`Error making datum: ${datum.error}`);
 
   lucid.selectWallet.fromAddress(adminAddress, [qualifiedUtxo]);
-  const txComplete = await mayFailAsync(() =>
+  const txCompleteResult = await mayFailAsync(() =>
     lucid
       .newTx()
       .mintAssets(mintingAssets, ParameterMint())
@@ -69,17 +68,18 @@ const mint = async (
       .attachMetadata(674, {
         msg: ["Mint Parameter"],
       })
-      .complete({ localUPLCEval: false })
+      .complete()
   ).complete();
-  if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
-  return Ok(txComplete.data);
+  if (!txCompleteResult.ok)
+    return Err(`Building Tx: ${txCompleteResult.error}`);
+  return Ok(txCompleteResult.data.toCBOR());
 };
 
 const burn = async (
   lucid: LucidEvolution,
   adminAddress: string,
   unit: string
-): Promise<Result<TxSignBuilder, string>> => {
+): Promise<Result<string, string>> => {
   const adminPubKeyHash = getPaymentKey(adminAddress);
   if (!adminPubKeyHash.ok) return Err(adminPubKeyHash.error);
 
@@ -102,7 +102,7 @@ const burn = async (
   const burnAssets: Assets = {
     [unit]: -1n,
   };
-  const txComplete = await mayFailAsync(() =>
+  const txCompleteResult = await mayFailAsync(() =>
     lucid
       .newTx()
       .collectFrom([utxoResult.data])
@@ -115,9 +115,10 @@ const burn = async (
       })
       .complete({ localUPLCEval: false })
   ).complete();
-  if (!txComplete.ok) return Err(`Building Tx: ${txComplete.error}`);
+  if (!txCompleteResult.ok)
+    return Err(`Building Tx: ${txCompleteResult.error}`);
 
-  return Ok(txComplete.data);
+  return Ok(txCompleteResult.data.toCBOR());
 };
 
 export { burn, mint };

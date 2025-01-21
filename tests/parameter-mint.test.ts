@@ -19,7 +19,7 @@ describe("parameter test", () => {
 
       lucid.selectWallet.fromSeed(adminAccount.seedPhrase);
       const txHash = await (
-        await lucid.fromTx(txResult.data.toCBOR()).sign.withWallet().complete()
+        await lucid.fromTx(txResult.data).sign.withWallet().complete()
       ).submit();
       emulator.awaitBlock(10);
 
@@ -50,7 +50,7 @@ describe("parameter test", () => {
 
       lucid.selectWallet.fromSeed(adminAccount.seedPhrase);
       await (
-        await lucid.fromTx(txResult.data.toCBOR()).sign.withWallet().complete()
+        await lucid.fromTx(txResult.data).sign.withWallet().complete()
       ).submit();
       emulator.awaitBlock(10);
       referenceUtxos.parameterRefUtxo = undefined;
