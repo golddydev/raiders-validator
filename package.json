@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf ./dist && npx tsc && rm -rf ./dist/tests",
+    "build": "rm -rf ./dist && npx tsc && cp -r ./src/deployed ./dist",
     "prettier": "concurrently \"npx prettier -w '**/*.{js,jsx,ts,tsx,json,.*}'\" \"aiken fmt\"",
     "lint": "concurrently \"npx prettier --check '**/*.{js,jsx,ts,tsx,json,.*}'\" \"aiken fmt --check\" \"npx eslint . --max-warnings=0\"",
     "test:aiken": "concurrently \"aiken check\"",
