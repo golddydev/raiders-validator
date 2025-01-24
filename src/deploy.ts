@@ -13,7 +13,7 @@ import { Err, Ok, Result } from "ts-res";
 import { getConfig } from "./config/index.js";
 import { createAlwaysFailScript } from "./utils/index.js";
 
-const deployedPath = path.join(getDirname(import.meta.url), "../deployed");
+const deployedPath = path.join(getDirname(import.meta.url), "./deployed");
 
 const deploy = async (
   lucid: LucidEvolution,

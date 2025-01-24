@@ -137,4 +137,4 @@ aiken.lock
 plutus.json
 
 # testing deployed utxo
-deployed/**/*-test.json
+**/deployed/**/*-test.json
